@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrizIA — Infraestrutura Privada de IA para Empresas Brasileiras</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde: #00C870;
+            --verde-escuro: #009950;
+            --amarelo: #F5C400;
+            --preto: #0A0A08;
+            --branco: #F4F1EB;
+            --cinza: #1A1A16;
+            --cinza-2: #2A2A24;
+            --texto-muted: #8A8A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--preto);
+            color: var(--branco);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 48px;
+            background: rgba(10,10,8,0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+        .logo span { color: var(--verde); }
+        nav ul { display: flex; gap: 36px; list-style: none; }
+        nav a { color: var(--texto-muted); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
+        nav a:hover { color: var(--branco); }
+        .nav-cta { background: var(--verde) !important; color: var(--preto) !important; padding: 10px 20px; font-weight: 500; }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            padding: 140px 48px 80px; position: relative; overflow: hidden;
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image: linear-gradient(rgba(0,200,112,0.04) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0,200,112,0.04) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+        }
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+            color: var(--verde); border: 1px solid rgba(0,200,112,0.3);
+            padding: 6px 14px; width: fit-content; margin-bottom: 40px;
+            animation: fadeUp 0.8s ease both;
+        }
+        .hero-tag::before {
+            content: ''; width: 6px; height: 6px; background: var(--verde);
+            border-radius: 50%; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(52px, 7vw, 96px); font-weight: 700;
+            line-height: 1.0; letter-spacing: -2px; max-width: 900px;
+            margin-bottom: 32px; animation: fadeUp 0.8s 0.1s ease both;
+        }
+        h1 em { font-style: italic; color: var(--verde); }
+
+        .hero-sub {
+            font-family: 'IBM Plex Mono', monospace; font-size: 15px;
+            color: var(--texto-muted); max-width: 560px; line-height: 1.8;
+            margin-bottom: 48px; animation: fadeUp 0.8s 0.2s ease both;
+        }
+        .hero-actions { display: flex; align-items: center; gap: 20px; animation: fadeUp 0.8s 0.3s ease both; }
+
+        .btn-primary {
+            background: var(--verde); color: var(--preto); padding: 16px 32px;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+            letter-spacing: 0.05em; text-transform: uppercase; text-decoration: none;
+            display: inline-block; transition: all 0.2s; cursor: pointer; border: none;
+        }
+        .btn-primary:hover { background: #00e07c; transform: translateY(-2px); }
+        .btn-ghost { color: var(--branco); text-decoration: none; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.5; transition: opacity 0.2s; }
+        .btn-ghost:hover { opacity: 1; }
+
+        .hero-stats {
+            display: flex; gap: 48px; margin-top: 80px; padding-top: 48px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            animation: fadeUp 0.8s 0.4s ease both;
+        }
+        .stat-num { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: var(--verde); letter-spacing: -1px; }
+        .stat-label { font-size: 11px; color: var(--texto-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+        .connectors { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 32px; animation: fadeUp 0.8s 0.35s ease both; }
+        .connectors-label { font-size: 11px; color: var(--texto-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-right: 8px; }
+        .connector-chip { background: var(--cinza-2); border: 1px solid rgba(255,255,255,0.08); padding: 5px 12px; font-size: 11px; color: var(--texto-muted); letter-spacing: 0.05em; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── SECTIONS ── */
+        section { padding: 100px 48px; max-width: 1200px; margin: 0 auto; }
+        .section-tag { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--verde); margin-bottom: 16px; }
+        h2 { font-family: 'Fraunces', serif; font-size: clamp(36px, 4vw, 56px); font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; }
+        h2 em { font-style: italic; color: var(--verde); }
+        .section-lead { font-size: 15px; color: var(--texto-muted); max-width: 580px; line-height: 1.8; margin-bottom: 64px; }
+
+        /* ── COMO FUNCIONA ── */
+        .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
+        .step { background: var(--preto); padding: 48px 40px; position: relative; }
+        .step-num { font-family: 'Syne', sans-serif; font-size: 64px; font-weight: 800; color: rgba(0,200,112,0.1); line-height: 1; margin-bottom: 24px; }
+        .step h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px; }
+        .step p { color: var(--texto-muted); font-size: 13px; line-height: 1.8; }
+
+        /* ── PLANOS ── */
+        .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); margin-top: 64px; }
+        .plan { background: var(--preto); padding: 52px 48px; position: relative; }
+        .plan.featured { background: var(--cinza); }
+        .plan-badge { position: absolute; top: 24px; right: 24px; background: var(--verde); color: var(--preto); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 10px; }
+        .plan-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--texto-muted); margin-bottom: 16px; }
+        .plan-price { font-family: 'Fraunces', serif; font-size: 52px; font-weight: 700; letter-spacing: -2px; line-height: 1; margin-bottom: 6px; }
+        .plan-price .currency { font-size: 24px; vertical-align: top; margin-top: 10px; display: inline-block; }
+        .plan-note { font-size: 12px; color: var(--texto-muted); margin-bottom: 36px; }
+        .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+        .plan-features li { font-size: 13px; color: var(--texto-muted); padding-left: 20px; position: relative; }
+        .plan-features li::before { content: '—'; position: absolute; left: 0; color: var(--verde); }
+
+        /* ── PORQUE PRIVADO ── */
+        .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
+        .why-item { background: var(--preto); padding: 40px; }
+        .why-item:nth-child(odd) { background: var(--cinza); }
+        .why-icon { font-size: 28px; margin-bottom: 16px; }
+        .why-item h4 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+        .why-item p { font-size: 13px; color: var(--texto-muted); line-height: 1.8; }
+
+        /* ── LGPD ── */
+        .lgpd-bar { background: rgba(0,200,112,0.06); border: 1px solid rgba(0,200,112,0.2); padding: 24px 36px; display: flex; align-items: center; gap: 20px; margin: 64px 0; }
+        .lgpd-icon { font-size: 32px; flex-shrink: 0; }
+        .lgpd-text strong { font-family: 'Syne', sans-serif; font-size: 15px; display: block; margin-bottom: 4px; }
+        .lgpd-text span { font-size: 13px; color: var(--texto-muted); }
+
+        /* ── FAQ ── */
+        .faq-list { display: flex; flex-direction: column; gap: 1px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); }
+        .faq-item { background: var(--preto); padding: 28px 36px; cursor: pointer; }
+        .faq-item:hover { background: var(--cinza); }
+        .faq-q { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .faq-q::after { content: '+'; color: var(--verde); font-size: 20px; font-weight: 300; flex-shrink: 0; }
+        .faq-a { font-size: 13px; color: var(--texto-muted); line-height: 1.8; margin-top: 16px; display: none; }
+        .faq-item.open .faq-a { display: block; }
+        .faq-item.open .faq-q::after { content: '−'; }
+
+        /* ── CTA FINAL ── */
+        .cta-section { text-align: center; padding: 120px 48px; position: relative; overflow: hidden; max-width: 100%; }
+        .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,200,112,0.08) 0%, transparent 70%); pointer-events: none; }
+        .cta-section h2 { max-width: 700px; margin: 0 auto 20px; }
+        .cta-section p { color: var(--texto-muted); font-size: 14px; margin-bottom: 40px; }
+
+        /* ── FOOTER ── */
+        footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; }
+        footer p { font-size: 12px; color: var(--texto-muted); }
+
+        .divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 48px; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: var(--preto); }
+        ::-webkit-scrollbar-thumb { background: var(--verde-escuro); }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            nav { padding: 16px 24px; }
+            .hero, section { padding-left: 24px; padding-right: 24px; }
+            h1 { font-size: 42px; letter-spacing: -1px; }
+            .steps, .plans, .why-grid { grid-template-columns: 1fr; }
+            .hero-stats { flex-wrap: wrap; gap: 32px; }
+            footer { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="logo">Matriz<span>IA</span></div>
+    <ul>
+        <li><a href="#como-funciona">Como Funciona</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#por-que">Por Que Privado</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contato" class="nav-cta">Falar com Especialista</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-tag">Infraestrutura Privada de IA · Brasil</div>
+    <h1>Agentes de IA<br>implantados no seu<br><em>próprio hardware.</em></h1>
+    <p class="hero-sub">
+        Implantação white-glove de agentes de IA privados para CEOs, CFOs e equipes executivas.
+        Rodando em infraestrutura que você controla — sem dados na nuvem, sem riscos de LGPD, sem mensalidades de SaaS.
+    </p>
+    <div class="hero-actions">
+        <a href="#contato" class="btn-primary">Agendar Diagnóstico Gratuito →</a>
+        <a href="#como-funciona" class="btn-ghost">Ver como funciona</a>
+    </div>
+    <div class="connectors">
+        <span class="connectors-label">Integra com</span>
+        <span class="connector-chip">Gmail</span>
+        <span class="connector-chip">WhatsApp</span>
+        <span class="connector-chip">Notion</span>
+        <span class="connector-chip">Salesforce</span>
+        <span class="connector-chip">SAP</span>
+        <span class="connector-chip">RD Station</span>
+        <span class="connector-chip">Google Drive</span>
+        <span class="connector-chip">Slack</span>
+        <span class="connector-chip">+ muito mais</span>
+    </div>
+    <div class="hero-stats">
+        <div><div class="stat-num">48h</div><div class="stat-label">Do equipamento ao ar</div></div>
+        <div><div class="stat-num">100%</div><div class="stat-label">On-premise no Brasil</div></div>
+        <div><div class="stat-num">LGPD</div><div class="stat-label">Compliant by design</div></div>
+        <div><div class="stat-num">4–50+</div><div class="stat-label">Colaboradores ideais</div></div>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+    <div class="section-tag">// Implementação</div>
+    <h2>Da reunião ao<br><em>agente em produção.</em></h2>
+    <p class="section-lead">Instalação em três etapas. Nós voamos até você, integramos tudo e não embarcamos de volta até que seus agentes estejam rodando.</p>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">01</div>
+            <h3>Kickoff Estratégico</h3>
+            <p>Mapeamos seus processos, sistemas e gargalos. Definimos quais agentes geram mais retorno: inbox executivo, pipeline de vendas, operações, RH, financeiro.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">02</div>
+            <h3>Deploy On-Site</h3>
+            <p>Nossa equipe viaja até sua empresa. Instalamos o cluster, endurecemos a rede, integramos os sistemas e colocamos os agentes no ar. Tudo em até 48 horas.</p>
+        </div>
+        <div class="step">
+            <div class="step-num">03</div>
+            <h3>Hypercare de 14 Dias</h3>
+            <p>Monitoramento intensivo, ajustes finos e treinamento do time. Só saímos quando você tem total confiança na operação.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PLANOS -->
+<section id="planos">
+    <div class="section-tag">// Planos</div>
+    <h2>Infraestrutura para<br><em>qualquer escala.</em></h2>
+    <p class="section-lead">Hardware fornecido ao custo de aquisição. O serviço cobre configuração, viagem, implantação e hardening de segurança.</p>
+    <div class="plans">
+        <div class="plan">
+            <div class="plan-name">Plano Executivo</div>
+            <div class="plan-price"><span class="currency">R$</span>85.000</div>
+            <div class="plan-note">investimento único · hardware incluso ao custo</div>
+            <ul class="plan-features">
+                <li>Até 3 agentes de IA customizados</li>
+                <li>Cluster dual Mac Studio privado</li>
+                <li>Ideal para uso individual de C-Level</li>
+                <li>Hardening de segurança completo</li>
+                <li>14 dias de hypercare</li>
+                <li>Documentação e treinamento do time</li>
+            </ul>
+            <a href="#contato" class="btn-primary">Solicitar Proposta</a>
+        </div>
+        <div class="plan featured">
+            <div class="plan-badge">Mais Popular</div>
+            <div class="plan-name">Plano Enterprise</div>
+            <div class="plan-price"><span class="currency">R$</span>155.000</div>
+            <div class="plan-note">investimento único · hardware incluso ao custo</div>
+            <ul class="plan-features">
+                <li>Até 6 agentes de IA customizados</li>
+                <li>Cluster quad Mac Studio privado</li>
+                <li>Para múltiplos líderes e fluxos paralelos</li>
+                <li>Isolamento de rede avançado</li>
+                <li>14 dias de hypercare</li>
+                <li>Configuração de alta disponibilidade</li>
+            </ul>
+            <a href="#contato" class="btn-primary">Solicitar Proposta</a>
+        </div>
+    </div>
+    <div style="margin-top: 1px; background: rgba(255,255,255,0.06);">
+        <div style="background: var(--cinza-2); padding: 48px; border: 1px solid rgba(255,255,255,0.06);">
+            <div class="plan-name">Suporte Gerenciado</div>
+            <div style="display: flex; align-items: baseline; gap: 8px; margin: 12px 0 6px;">
+                <span style="font-family: 'Fraunces', serif; font-size: 42px; font-weight: 700; letter-spacing: -1px;">R$ 3.500</span>
+                <span style="color: var(--texto-muted); font-size: 13px;">/mês</span>
+            </div>
+            <p style="color: var(--texto-muted); font-size: 13px; margin-bottom: 28px;">Monitoramento contínuo, rollouts de novos modelos, patches de segurança e canal Slack dedicado. Sua infraestrutura, gerenciada por especialistas.</p>
+            <a href="#contato" class="btn-primary">Saiba Mais</a>
+        </div>
+    </div>
+</section>
+
+<!-- POR QUE PRIVADO -->
+<section id="por-que">
+    <div class="section-tag">// Por que IA Privada</div>
+    <h2>Seus dados não saem<br><em>do seu servidor.</em></h2>
+    <div class="lgpd-bar">
+        <div class="lgpd-icon">🛡️</div>
+        <div class="lgpd-text">
+            <strong>Conformidade com LGPD garantida por arquitetura.</strong>
+            <span>Nenhum prompt, nenhum dado de cliente, nenhuma informação estratégica trafega por APIs externas. Inference local, sem exceções.</span>
+        </div>
+    </div>
+    <div class="why-grid">
+        <div class="why-item">
+            <div class="why-icon">🏢</div>
+            <h4>On-Premise por Padrão</h4>
+            <p>A inferência roda em hardware dentro da sua empresa. Quando integrações exigem chamadas externas, configuramos com acesso mínimo e documentamos cada conexão.</p>
+        </div>
+        <div class="why-item">
+            <div class="why-icon">⚡</div>
+            <h4>Performance de Fronteira</h4>
+            <p>Rode modelos open-source de fronteira localmente. Sem rate limits, sem throttling, sem filas de processamento. Velocidade máxima para sua equipe.</p>
+        </div>
+        <div class="why-item">
+            <div class="why-icon">🔐</div>
+            <h4>Segurança Física</h4>
+            <p>Hardware que você pode ver, tocar e trancar. Configurações air-gapped disponíveis para ambientes que exigem isolamento total — financeiro, saúde, jurídico.</p>
+        </div>
+        <div class="why-item">
+            <div class="why-icon">💰</div>
+            <h4>Sem Mensalidade de SaaS</h4>
+            <p>Sem assinatura por usuário, sem cobrança por token, sem surpresa no boleto. Você é dono do hardware, do software e de cada inferência realizada.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="section-tag">// FAQ</div>
+    <h2>Perguntas <em>frequentes.</em></h2>
+    <div class="faq-list">
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">O que exatamente vocês implantam?</div>
+            <div class="faq-a">Implantamos agentes de IA customizados rodando em clusters Mac Studio de sua propriedade. Cada agente é configurado para uma função específica — inbox do CEO, pipeline de vendas, operações financeiras — e roda inteiramente no seu hardware.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Precisamos ter equipe técnica interna?</div>
+            <div class="faq-a">Não. Nossa proposta é exatamente eliminar essa necessidade. Nós cuidamos de toda a infraestrutura. Com o Suporte Gerenciado, você tem especialistas de plantão sem precisar contratar um time de MLOps interno.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Vocês viajam para fora do eixo SP-RJ?</div>
+            <div class="faq-a">Sim. Atendemos empresas em todo o território nacional. A viagem está incluída no custo de implementação. Belo Horizonte, Curitiba, Porto Alegre, Recife, Fortaleza, Manaus — onde você estiver, nós vamos.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Como fica a LGPD com os dados processados?</div>
+            <div class="faq-a">Por ser 100% on-premise, seus dados nunca saem da sua infraestrutura. Não enviamos nada para APIs de terceiros para inferência. Isso coloca sua operação em conformidade com a LGPD por design arquitetural, não apenas por contrato.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Quais modelos de IA são utilizados?</div>
+            <div class="faq-a">Utilizamos os melhores modelos open-source de fronteira disponíveis — Llama, Qwen, Mistral e outros. A escolha depende do caso de uso, latência exigida e recursos do cluster. Tudo é atualizado continuamente via Suporte Gerenciado.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Em quanto tempo os agentes ficam operacionais?</div>
+            <div class="faq-a">A maioria dos clusters sai do unboxing para produção em 48 horas de trabalho on-site. Casos com integrações mais complexas (ERP, sistemas legados) podem levar até 5 dias.</div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-section" id="contato">
+    <div class="cta-bg"></div>
+    <div class="section-tag">// Acelere sua Matriz de IA</div>
+    <h2>Pronto para ter<br>IA trabalhando <em>para você?</em></h2>
+    <p>Diagnóstico gratuito de 30 minutos. Mapeamos seus processos e apresentamos quais agentes geram o maior retorno para sua operação.</p>
+    <a href="mailto:contato@matrizia.com.br" class="btn-primary">Agendar Diagnóstico Gratuito →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="logo">Matriz<span>IA</span></div>
+    <p>© 2025 MatrizIA · Infraestrutura Privada de IA · Brasil</p>
+    <p>contato@matrizia.com.br</p>
+</footer>
+
+</body>
+</html>
